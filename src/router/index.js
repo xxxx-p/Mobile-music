@@ -11,21 +11,20 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: Recommend
+      redirect: '/recommend'
     },
     {
-    path: '/recommend',
-    component: Recommend
-  }, {
-    path: '/singer',
-    component: Singer
-  }, {
-    path: '/rank',
-    component: Rank
-  }, {
-    path: '/search',
-    component: Search
-  },
-
+      path: '/recommend',
+      component: Recommend
+    }, {
+      path: '/singer',
+      component: Singer
+    }, {
+      path: '/rank',
+      component: Rank
+    }, {
+      path: '/search',
+      component: Search
+    }
   ]
 })
