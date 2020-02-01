@@ -7,7 +7,7 @@ export default function jsonp(url,data,option){
             if(!err){
                 resolve(data)
             }else{
-                reject(data)
+                reject(err)
             }
         })
     })

@@ -3,13 +3,13 @@
   "data": {
     "swiperList": [{
         "id": "0001",
-        "imgUrl": "https://imgessl.kugou.com/commendpic/20200109/20200109174832380572.jpg"
+        "imgUrl": "http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/1987128.jpg"
       },{
         "id": "0002",
-        "imgUrl": "https://imgessl.kugou.com/commendpic/20190109/20190109104155147376.jpg"
+        "imgUrl": "http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/1986348.jpg"
       },{
         "id": "0003",
-        "imgUrl": "https://imgessl.kugou.com/commendpic/20190611/20190611101938392990.jpg"
+        "imgUrl": "http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/1985285.jpg"
       }]
   }
 }

@@ -1,11 +1,11 @@
 <template>
-  <div class="recommend">
-    <scroll ref="scroll" class="recommend-content" :data="discList">
+  <div class="recommend" ref="list">
+    <scroll ref="recommend" class="recommend-content" :data="discList">
       <div>
         <slider v-if="recommend.length" class="slider-wrapper">
           <div v-for="item in recommend" :key="item.id">
-            <a :href="item.imgUrl">
-              <img class="needsclick" @load="loadImg" :src="item.imgUrl" />
+            <a :href="item.picUrl">
+              <img class="needsclick" @load="loadImg" :src="item.picUrl" />
             </a>
           </div>
         </slider>
@@ -22,8 +22,7 @@
           </ul>
         </div>
       </div>
-      <loading v-show="!discList.length">
-      </loading>
+      <loading v-show="!discList.length"></loading>
     </scroll>
   </div>
 </template>
@@ -32,10 +31,12 @@ import axios from "axios";
 import Slider from "base/slider/slider.vue";
 import Scroll from "base/scroll/scroll.vue";
 import Loading from "base/loading/loading.vue";
-import { getDiscList } from "api/recommend";
+import { getDiscList, getRecommend } from "api/recommend";
 import { ERR_OK } from "api/config";
+import { playlistMixin } from "common/js/mixin";
 export default {
   name: "Recommend",
+  mixins: [playlistMixin],
   data() {
     return {
       recommend: [],
@@ -49,9 +50,10 @@ export default {
   },
   methods: {
     _getRecommend() {
-      axios.get("/dev/index.json").then(res => {
-        const resp = res.data;
-        this.recommend = resp.data.swiperList;
+      getRecommend().then(res => {
+        if (res.code === 200) {
+          this.recommend = res.data;
+        }
       });
     },
     _getDiscList() {
@@ -63,9 +65,14 @@ export default {
     },
     loadImg() {
       if (!this.clickImg) {
-        this.$refs.scroll.refresh();
+        this.$refs.recommend.refresh();
         this.clickImg = true;
       }
+    },
+    handlePlaylist(NewPlaylist) {
+      const bottom = NewPlaylist.length > 0 ? "60px" : 0;
+      this.$refs.list.style.bottom = bottom;
+      this.$refs.recommend.refresh();
     }
   },
   components: {

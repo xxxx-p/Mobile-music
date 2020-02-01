@@ -8,5 +8,46 @@ export function addClass(el, className) {
     }
     let newClass = el.className.split(' ')
     newClass.push(className)
-    el.className=newClass.join(' ')
+    el.className = newClass.join(' ')
+}
+export function getData(el, name, val) {
+    const prefix = 'data-'
+    let datas = prefix + name
+    if (val) {
+        return el.setAttribute(datas, val)
+    } else {
+        return el.getAttribute(datas)
+    }
+}
+
+export function prefixStyle(style) {
+    let elementStyle = document.createElement('div').style
+
+    let vendor = (() => {
+        let transformNames = {
+            webkit: 'webkitTransform',
+            Moz: 'MozTransform',
+            O: 'OTransform',
+            ms: 'msTransform',
+            standard: 'transform'
+        }
+
+        for (let key in transformNames) {
+            if (elementStyle[transformNames[key]] !== undefined) {
+                return key
+            }
+        }
+
+        return false
+    })()
+
+    if (vendor === false) {
+        return false
+    }
+
+    if (vendor === 'standard') {
+        return style
+    }
+
+    return vendor + style.charAt(0).toUpperCase() + style.substr(1)
 }

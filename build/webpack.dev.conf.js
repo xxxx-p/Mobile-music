@@ -11,7 +11,7 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 var axios = require('axios')
 var express = require('express')
-var app = express() 
+var app = express()
 var apiRoutes = express.Router()
 app.use('/api', apiRoutes)
 const HOST = process.env.HOST
@@ -47,7 +47,20 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     watchOptions: {
       poll: config.dev.poll,
     },
-    before(app){
+    before(app) {
+      app.get('/api/getRecommend', function (req, res) {
+        var url = ' https://v1.itooi.cn/netease/banner'
+        axios.get(url, {
+          headers: {
+            referer: 'https://v1.itooi.cn/',
+            host: 'v1.itooi.cn'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+        })
+      })
       app.get('/api/getDiscList', function (req, res) {
         var url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
         axios.get(url, {
@@ -61,6 +74,29 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         }).catch((e) => {
         })
       })
+      app.get('/api/lyric', function (req, res) {
+        var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          var ret = response.data
+          // if (typeof ret === 'string') {
+          //   var reg = /^\w+\(({[^()]+})\)$/
+          //   var matches = ret.match(reg)
+          //   if (matches) {
+          //     ret = JSON.parse(matches[1])
+          //   }
+          // }
+          res.json(ret)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+
     }
   },
   plugins: [
@@ -104,8 +140,8 @@ module.exports = new Promise((resolve, reject) => {
           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
         },
         onErrors: config.dev.notifyOnErrors
-        ? utils.createNotifierCallback()
-        : undefined
+          ? utils.createNotifierCallback()
+          : undefined
       }))
 
       resolve(devWebpackConfig)
