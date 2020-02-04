@@ -26,7 +26,10 @@
       class="list"
     >
       <div class="wrap" ref="wrap">
-        <song @select="selectItem" :songs="songs"></song>
+        <song :rank="rank" @select="selectItem" :songs="songs"></song>
+      </div>
+       <div class="loading-container" v-show="!songs.length">
+        <loading></loading>
       </div>
     </scroll>
   </div>
@@ -37,6 +40,7 @@ import Song from "base/song-list/song-list.vue";
 import { prefixStyle } from "common/js/dom.js";
 import { mapActions } from "vuex";
 import { playlistMixin } from "common/js/mixin";
+import Loading from "base/loading/loading";
 let transform = prefixStyle("transform");
 const replaceStateRVED_HEIGHT = 40;
 export default {
@@ -45,14 +49,15 @@ export default {
     return {
       probeType: 3,
       listenScroll: true,
-      scrollY: 0
+      scrollY: 0,
     };
   },
   name: "Music-list",
-  props: ["bgImage", "songs", "title"],
+  props: ["bgImage", "songs", "title","rank"],
   components: {
     Scroll,
-    Song
+    Song,
+    Loading
   },
   mounted() {
     this.imageHeight = this.$refs.bgimge.clientHeight;
@@ -99,9 +104,9 @@ export default {
       this.randomPlay({ list: this.songs });
     },
     handlePlaylist(NewPlaylist) {
-      const bottom = NewPlaylist.length > 0 ? '60px' : 0;
-      this.$refs.list.$el.style.bottom=bottom
-      this.$refs.list.refresh()
+      const bottom = NewPlaylist.length > 0 ? "60px" : 0;
+      this.$refs.list.$el.style.bottom = bottom;
+      this.$refs.list.refresh();
     },
     ...mapActions(["selectPlay", "randomPlay"])
   }
@@ -140,11 +145,14 @@ export default {
 
     .header-title {
       position: absolute;
-      width: 100%;
+      width: 60%;
       height: 2.625rem;
       line-height: 2.625rem;
       font-size: 18px;
       color: #fff;
+      left: 50%;
+      transform: translateX(-50%);
+      no-wrap();
     }
   }
 

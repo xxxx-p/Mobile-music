@@ -12,11 +12,11 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li v-for="item of discList" class="item">
-              <img class="icon" v-lazy="item.imgurl" />
+            <li @click="selectItem(item)" v-for="item of discList" class="item">
+              <img class="icon" v-lazy="item.coverImgUrl" />
               <div class="text">
-                <h2 class="name">{{item.creator.name}}</h2>
-                <p class="desc">{{item.dissname}}</p>
+                <h2 class="name">{{item.name}}</h2>
+                <p class="desc">{{item.creator.nickname}}</p>
               </div>
             </li>
           </ul>
@@ -24,6 +24,7 @@
       </div>
       <loading v-show="!discList.length"></loading>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 <script>
@@ -34,6 +35,7 @@ import Loading from "base/loading/loading.vue";
 import { getDiscList, getRecommend } from "api/recommend";
 import { ERR_OK } from "api/config";
 import { playlistMixin } from "common/js/mixin";
+import { mapMutations } from "vuex";
 export default {
   name: "Recommend",
   mixins: [playlistMixin],
@@ -58,8 +60,8 @@ export default {
     },
     _getDiscList() {
       getDiscList().then(res => {
-        if (res.code === ERR_OK) {
-          this.discList = res.data.list;
+        if (res.code === 200) {
+          this.discList = res.data;
         }
       });
     },
@@ -73,7 +75,16 @@ export default {
       const bottom = NewPlaylist.length > 0 ? "60px" : 0;
       this.$refs.list.style.bottom = bottom;
       this.$refs.recommend.refresh();
-    }
+    },
+    selectItem(item){
+      this.setDisc(item)
+      this.$router.push({
+        path:`/recommend/${item.id}`
+      })
+    },
+    ...mapMutations({
+      setDisc:'SET_DISC'
+    })
   },
   components: {
     Slider,
@@ -84,6 +95,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
+@import '~common/stylus/mixin';
 
 .recommend {
   position: absolute;
@@ -121,9 +133,11 @@ export default {
           display: flex;
           flex-direction: column;
           justify-content: center;
+          width: 230px;
 
           .name {
             margin-bottom: 0.625rem;
+            no-wrap();
           }
 
           .desc {
