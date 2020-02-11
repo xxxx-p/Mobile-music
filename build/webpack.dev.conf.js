@@ -128,6 +128,32 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         }).catch((e) => {
         })
       })
+      app.get('/api/hotkey', function (req, res) {
+        var url = 'https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+        })
+      })
+      app.get('/api/search', function (req, res) {
+        var url = 'https://v1.itooi.cn/netease/search'
+        axios.get(url, {
+          headers: {
+            referer: 'https://v1.itooi.cn/',
+            host: 'v1.itooi.cn'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+        })
+      })
     }
   },
   plugins: [

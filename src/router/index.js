@@ -33,8 +33,8 @@ export default new Router({
     }, {
       path: '/rank',
       component: Rank,
-      children:[{
-        path:":id",
+      children: [{
+        path: ":id",
         component: TopList
       }]
     }, {

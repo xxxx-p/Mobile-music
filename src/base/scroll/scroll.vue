@@ -34,6 +34,10 @@ export default {
     refreshDelay: {
       type: Number,
       default: 20
+    },
+    pullup: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
@@ -55,11 +59,25 @@ export default {
         click: this.click
       });
 
-      if(this.listenScroll){
-        let that = this
-        this.scroll.on('scroll',(pos)=>{
-          that.$emit('scroll',pos)
-        })
+      if (this.listenScroll) {
+        let that = this;
+        this.scroll.on("scroll", pos => {
+          that.$emit("scroll", pos);
+        });
+      }
+
+      if (this.pullup) {
+        this.scroll.on("scrollEnd", () => {
+          if (this.scroll.y <= this.scroll.maxScrollY + 50) {
+            this.$emit("scrollToEnd");
+          }
+        });
+      }
+
+      if (this.beforeScroll) {
+        this.scroll.on("beforeScrollStart", () => {
+          this.$emit("beforeScroll");
+        });
       }
     },
     disable() {

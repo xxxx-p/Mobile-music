@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       song: [],
-      rank:true
+      rank: true
     };
   },
   computed: {
@@ -31,14 +31,14 @@ export default {
   },
   methods: {
     _getMusicList() {
-      if(!this.toplist.id){
+      if (!this.toplist.id) {
         this.$router.push({
-          path:"/rank"
-        })
+          path: "/rank"
+        });
       }
       getMusicList(this.toplist.id).then(res => {
         if (res.code === 200) {
-          this.song = this._normalizeSongs(res.data.songs); 
+          this.song = this._normalizeSongs(res.data.songs);
         }
       });
     },

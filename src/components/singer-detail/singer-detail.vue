@@ -9,7 +9,7 @@
 import { mapGetters } from "vuex";
 import { getSingerDetail } from "api/singer.js";
 import { ERR_OK } from "api/config.js";
-import { createSong } from "common/js/song.js";
+import { createsingerSong } from "common/js/song.js";
 import Music from "components/music-list/music-list.vue";
 
 export default {
@@ -47,7 +47,7 @@ export default {
       song.forEach(item => {
         let { musicData } = item;
         if (musicData.songid && musicData.albummid) {
-          ret.push(createSong(musicData));
+          ret.push(createsingerSong(musicData));
         }
       });
       return ret;

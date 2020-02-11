@@ -28,7 +28,7 @@
       <div class="wrap" ref="wrap">
         <song :rank="rank" @select="selectItem" :songs="songs"></song>
       </div>
-       <div class="loading-container" v-show="!songs.length">
+      <div class="loading-container" v-show="!songs.length">
         <loading></loading>
       </div>
     </scroll>
@@ -49,11 +49,11 @@ export default {
     return {
       probeType: 3,
       listenScroll: true,
-      scrollY: 0,
+      scrollY: 0
     };
   },
   name: "Music-list",
-  props: ["bgImage", "songs", "title","rank"],
+  props: ["bgImage", "songs", "title", "rank"],
   components: {
     Scroll,
     Song,
@@ -172,7 +172,7 @@ export default {
 
     .play-wrapper {
       position: absolute;
-      bottom: 20px;
+      bottom: 60px;
       z-index: 50;
       width: 100%;
 
@@ -214,9 +214,13 @@ export default {
   }
 
   .bg-layer {
-    position: relative;
+    position: absolute;
     height: 100%;
-    background: $color-background;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 39%;
+    background: #222;
     z-index: 1;
   }
 
