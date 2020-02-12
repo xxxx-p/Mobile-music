@@ -76,7 +76,11 @@
               <i @click="next" class="icon-next"></i>
             </div>
             <div class="icon i-right">
-              <i class="icon icon-not-favorite"></i>
+              <i
+                class="icon"
+                :class="getFavoriteIcon(currentSong)"
+                @click="toggleFavorite(currentSong)"
+              ></i>
             </div>
           </div>
         </div>
@@ -125,7 +129,7 @@ import Playlist from "components/playlist/playlist";
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
 import { playerMixin } from "common/js/mixin";
-import {mapActions} from "vuex"
+import { mapActions } from "vuex";
 export default {
   name: "Player",
   mixins: [playerMixin],
@@ -229,6 +233,8 @@ export default {
       }
       if (this.playlist.length === 1) {
         this.loop();
+        this.setPlayingState(true);
+        return;
       } else {
         let index = this.currentIndex - 1;
         if (index === -1) {
@@ -250,6 +256,8 @@ export default {
       }
       if (this.playlist.length === 1) {
         this.loop();
+        this.setPlayingState(true);
+        return;
       } else {
         let index = this.currentIndex + 1;
 
@@ -293,7 +301,7 @@ export default {
       }
     },
     loop() {
-      this.$refs.audio.currentTime === 0;
+      this.$refs.audio.currentTime = 0;
       this.$refs.audio.play();
       if (this.currentLyric) {
         this.currentLyric.seek(0);
@@ -412,7 +420,7 @@ export default {
     showFlag() {
       this.$refs.playlist.show();
     },
-    ...mapActions(['savePlayHistory'])
+    ...mapActions(["savePlayHistory"])
   },
   watch: {
     currentSong(newsong, oldsong) {

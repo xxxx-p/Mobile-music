@@ -11,12 +11,7 @@
             </span>
           </h1>
         </div>
-        <scroll
-          :refreshDelay="refreshDelay"
-          :data="playlist"
-          ref="listcontent"
-          class="list-content"
-        >
+        <scroll :refreshDelay="120" :data="playlist" ref="listcontent" class="list-content">
           <transition-group name="list" tag="ul">
             <li
               :key="item.id"
@@ -27,8 +22,8 @@
             >
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
-              <span class="like">
-                <i class="icon-not-favorite"></i>
+              <span class="like" @click.stop="toggleFavorite(item)">
+                <i :class="getFavoriteIcon(item)"></i>
               </span>
               <span class="delete" @click.stop="deleteone(item)">
                 <i class="icon-delete"></i>

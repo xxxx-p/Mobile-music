@@ -56,7 +56,7 @@
 <script type="text/ecmascript-6">
 import SearchBox from "base/search-box/search-box";
 import Suggest from "components/suggest/suggest";
-import Switches from "base/Switches/Switches";
+import Switches from "base/switches/switches";
 import Scroll from "base/scroll/scroll";
 import SongList from "base/song-list/song-list";
 import SearchList from "base/search-list/search-list";

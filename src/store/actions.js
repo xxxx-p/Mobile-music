@@ -1,7 +1,7 @@
 import * as types from './mutatoin-types'
 import { playMode } from "common/js/config.js";
 import { shuffle } from "common/js/util.js";
-import { saveSearch, deleteSearch, clearSearch,savePlay } from "common/js/cache.js";
+import { saveSearch, deleteSearch, clearSearch, savePlay, saveFavorite, deleteFavorite } from "common/js/cache.js";
 
 function findIndex(list, song) {
     return list.findIndex((item) => {
@@ -108,5 +108,12 @@ export const deleteSongList = function ({ commit }) {
 }
 
 export const savePlayHistory = function ({ commit }, song) {
-    commit(types.SET_PLAY_HISTORY,savePlay(song))
+    commit(types.SET_PLAY_HISTORY, savePlay(song))
+}
+
+export const saveFavoriteList = function ({ commit }, favorite) {
+    commit(types.SET_Favorite_List, saveFavorite(favorite))
+}
+export const deleteFavoriteList = function ({ commit }, favorite) {
+    commit(types.SET_Favorite_List, deleteFavorite(favorite))
 }
