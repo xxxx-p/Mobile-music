@@ -8,10 +8,10 @@
 <script>
 import { mapGetters } from "vuex";
 import { getSingerDetail } from "api/singer.js";
+import { getMusicList } from "api/rank";
 import { ERR_OK } from "api/config.js";
-import { createsingerSong } from "common/js/song.js";
 import Music from "components/music-list/music-list.vue";
-
+import { createTopSong } from "common/js/song";
 export default {
   name: "Singer-Detail",
   data() {
@@ -24,7 +24,7 @@ export default {
       return this.singer.name;
     },
     bgImage() {
-      return this.singer.avatar;
+      return this.singer.img1v1Url;
     },
     ...mapGetters(["singer"])
   },
@@ -33,22 +33,19 @@ export default {
   },
   methods: {
     _getDetail() {
-      getSingerDetail(this.singer.id).then(res => {
+      getMusicList(this.singer.id).then(res => {
         if (!this.singer.id) {
           this.$router.push("/singer");
         }
-        if (res.code === ERR_OK) {
-          this.song = this._normalizeSongs(res.data.list);
+        if (res.code === 200) {
+          this.song = this._normalizeSongs(res.data.songs);
         }
       });
     },
     _normalizeSongs(song) {
       let ret = [];
-      song.forEach(item => {
-        let { musicData } = item;
-        if (musicData.songid && musicData.albummid) {
-          ret.push(createsingerSong(musicData));
-        }
+      song.forEach(musicData => {
+        ret.push(createTopSong(musicData));
       });
       return ret;
     }

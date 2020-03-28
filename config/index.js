@@ -11,12 +11,12 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/dev': {
-          target: 'http://localhost:8081',
-          pathRewrite: {
-              '^/dev': '/static/mock'
-          }  
-      }
+      // '/dev': {
+      //     target: 'http://localhost:8081',
+      //     pathRewrite: {
+      //         '^/dev': '/static/mock'
+      //     }
+      // }
   },
 
     // Various Dev Server settings

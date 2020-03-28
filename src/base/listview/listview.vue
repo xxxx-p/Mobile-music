@@ -11,7 +11,7 @@
         <h2 class="listview-title">{{items.title}}</h2>
         <ul class="listview-content-li">
           <li v-for="item of items.items" class="listview-item" @click="selectItem(item)">
-            <img v-lazy="item.avatar" class="listview-item-img" />
+            <img v-lazy="item.img1v1Url" class="listview-item-img" />
             <h2 class="listview-item-text">{{item.name}}</h2>
           </li>
         </ul>

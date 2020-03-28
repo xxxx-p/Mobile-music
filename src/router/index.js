@@ -76,6 +76,7 @@ export default new Router({
     }, {
       path: '/user',
       component: User
-    }
-  ]
+    },
+  ],
+  // mode: 'history'
 })
