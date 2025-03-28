@@ -62,11 +62,24 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         })
       })
       app.get('/api/getDiscList', function (req, res) {
-        var url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
+        var url = 'https://v1.itooi.cn/netease/songList/hot'
         axios.get(url, {
           headers: {
-            referer: 'https://c.y.qq.com/',
-            host: 'c.y.qq.com'
+            referer: 'https://v1.itooi.cn/',
+            host: 'v1.itooi.cn'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+        })
+      })
+      app.get('/api/getSongList', function (req, res) {
+        var url = 'https://v1.itooi.cn/netease/songList'
+        axios.get(url, {
+          headers: {
+            referer: 'https://v1.itooi.cn/',
+            host: 'v1.itooi.cn'
           },
           params: req.query
         }).then((response) => {
@@ -75,28 +88,46 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         })
       })
       app.get('/api/lyric', function (req, res) {
-        var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
+        var url = 'https://v1.itooi.cn/netease/lrc'
         axios.get(url, {
           headers: {
-            referer: 'https://c.y.qq.com/',
-            host: 'c.y.qq.com'
+            referer: 'https://v1.itooi.cn/',
+            host: 'v1.itooi.cn'
           },
           params: req.query
         }).then((response) => {
           var ret = response.data
-          // if (typeof ret === 'string') {
-          //   var reg = /^\w+\(({[^()]+})\)$/
-          //   var matches = ret.match(reg)
-          //   if (matches) {
-          //     ret = JSON.parse(matches[1])
-          //   }
-          // }
           res.json(ret)
         }).catch((e) => {
           console.log(e)
         })
       })
-
+      app.get('/api/TopList', function (req, res) {
+        var url = 'https://v1.itooi.cn/netease/artist/top'
+        axios.get(url, {
+          headers: {
+            referer: 'https://v1.itooi.cn/',
+            host: 'v1.itooi.cn'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+        })
+      })
+      app.get('/api/MusicList', function (req, res) {
+        var url = 'https://v1.itooi.cn/netease/song/artist'
+        axios.get(url, {
+          headers: {
+            referer: 'https://v1.itooi.cn/',
+            host: 'v1.itooi.cn'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+        })
+      })
     }
   },
   plugins: [

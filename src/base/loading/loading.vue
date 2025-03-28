@@ -24,6 +24,7 @@ export default {
   width: 100%;
   position: absolute;
   top: 50%;
+  z-index: 100;
 
   .loading-img {
     width: 1.5rem;
