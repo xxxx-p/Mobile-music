@@ -2,6 +2,9 @@
   <div class="m-header">
     <div class="icon"></div>
     <span class="text">Chicken Music</span>
+    <router-link tag="div" class="mine" to="/user">
+      <i class="icon-mine"></i>
+    </router-link>
   </div>
 </template>
 <script>
@@ -13,23 +16,40 @@ export default {};
 
 .m-header {
   position: relative;
-  height: 2.75rem;
-  justify-content: center;
-  align-items: center;
-  font-size: 0;
+  height: 44px;
+  text-align: center;
   color: $color-theme;
-  display: flex;
+  font-size: 0;
 
   .icon {
-    bg-image: 'logo';
-    width: 1.875rem;
-    height: 2rem;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 6px;
+    width: 30px;
+    height: 32px;
     margin-right: 9px;
-    background-size: cover;
+    bg-image('logo');
+    background-size: 30px 32px;
   }
 
   .text {
-    font-size: 18px;
+    display: inline-block;
+    vertical-align: top;
+    line-height: 44px;
+    font-size: $font-size-large;
+  }
+
+  .mine {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    .icon-mine {
+      display: block;
+      padding: 12px;
+      font-size: 20px;
+      color: $color-theme;
+    }
   }
 }
 </style>

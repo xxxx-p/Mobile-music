@@ -76,7 +76,11 @@
               <i @click="next" class="icon-next"></i>
             </div>
             <div class="icon i-right">
-              <i class="icon icon-not-favorite"></i>
+              <i
+                class="icon"
+                :class="getFavoriteIcon(currentSong)"
+                @click="toggleFavorite(currentSong)"
+              ></i>
             </div>
           </div>
         </div>
@@ -96,11 +100,12 @@
             <i class="icon-mini" :class="miniIcon" @click.stop="togglePlaying"></i>
           </progress-circle>
         </div>
-        <div class="control">
+        <div class="control" @click.stop="showFlag">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <Playlist ref="playlist"></Playlist>
     <audio
       ref="audio"
       :src="currentSong.url"
@@ -112,7 +117,6 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapMutations } from "vuex";
 import animations from "create-keyframe-animation";
 import { prefixStyle } from "common/js/dom.js";
 import ProgressBar from "base/progress-bar/progress-bar.vue";
@@ -121,11 +125,14 @@ import { playMode } from "common/js/config.js";
 import { shuffle } from "common/js/util.js";
 import Lyric from "lyric-parser";
 import Scroll from "base/scroll/scroll.vue";
-
+import Playlist from "components/playlist/playlist";
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
+import { playerMixin } from "common/js/mixin";
+import { mapActions } from "vuex";
 export default {
   name: "Player",
+  mixins: [playerMixin],
   data() {
     return {
       songReady: false,
@@ -143,7 +150,8 @@ export default {
   components: {
     ProgressBar,
     ProgressCircle,
-    Scroll
+    Scroll,
+    Playlist
   },
   computed: {
     disableCls() {
@@ -167,16 +175,7 @@ export default {
         : this.mode === playMode.loop
         ? "icon-loop"
         : "icon-random";
-    },
-    ...mapGetters([
-      "fullScreen",
-      "playlist",
-      "currentSong",
-      "playing",
-      "currentIndex",
-      "mode",
-      "sequenceList"
-    ])
+    }
   },
   methods: {
     back() {
@@ -187,6 +186,7 @@ export default {
     },
     ready() {
       this.songReady = true;
+      this.savePlayHistory(this.currentSong);
     },
     error() {
       this.songReady = true;
@@ -233,6 +233,8 @@ export default {
       }
       if (this.playlist.length === 1) {
         this.loop();
+        this.setPlayingState(true);
+        return;
       } else {
         let index = this.currentIndex - 1;
         if (index === -1) {
@@ -254,6 +256,8 @@ export default {
       }
       if (this.playlist.length === 1) {
         this.loop();
+        this.setPlayingState(true);
+        return;
       } else {
         let index = this.currentIndex + 1;
 
@@ -283,18 +287,6 @@ export default {
     updateTime(e) {
       this.currentTime = e.target.currentTime;
     },
-    changeMode() {
-      const mode = (this.mode + 1) % 3;
-      let list = null;
-      this.setPlayMode(mode);
-      if (this.mode === playMode.random) {
-        list = shuffle(this.sequenceList);
-      } else {
-        list = this.sequenceList;
-      }
-      this.resetCurrentIndex(list);
-      this.setPlayList(list);
-    },
     resetCurrentIndex(list) {
       const index = list.findIndex(item => {
         return item.id === this.currentSong.id;
@@ -309,7 +301,7 @@ export default {
       }
     },
     loop() {
-      this.$refs.audio.currentTime === 0;
+      this.$refs.audio.currentTime = 0;
       this.$refs.audio.play();
       if (this.currentLyric) {
         this.currentLyric.seek(0);
@@ -425,16 +417,16 @@ export default {
         this.currentLyric.togglePlay();
       }
     },
-    ...mapMutations({
-      setFullScreen: "SET_FULL_SCREEN",
-      setPlayingState: "SET_PLAYING_STATE",
-      setCurrentIndex: "SET_CURRENT_INDEX",
-      setPlayMode: "SET_PLAY_MODE",
-      setPlayList: "SET_PLAYLIST"
-    })
+    showFlag() {
+      this.$refs.playlist.show();
+    },
+    ...mapActions(["savePlayHistory"])
   },
   watch: {
     currentSong(newsong, oldsong) {
+      if (!newsong.id) {
+        return;
+      }
       if (newsong.id === oldsong.id) {
         return;
       }

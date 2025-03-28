@@ -9,12 +9,13 @@ import { getSingerList } from "api/singer.js";
 import { ERR_OK } from "api/config.js";
 import { Singer } from "common/js/singer.js";
 import Listview from "base/listview/listview.vue";
-import {mapMutations} from "vuex";
+import { mapMutations } from "vuex";
+import pinyin from "base/pinyin/Convert_Pinyin.js";
 
 const HOT_SINGER_LEN = 10;
 const HOT_NAME = "热门";
 export default {
-  name:"Singer",
+  name: "Singer",
   data() {
     return {
       singlist: []
@@ -26,63 +27,46 @@ export default {
   methods: {
     _getSingerList() {
       getSingerList().then(res => {
-        if (res.code === ERR_OK) {
-          this.list = res.data.list;
-          this.singlist = this._normalizeSinger(res.data.list);
+        if (res.code === 200) {
+          let list = res.data;
+          list.sort(function compareFunction(item1, item2) {
+            return item1.name.localeCompare(item2.name);
+          });
+          this.singlist = this._normalizeSinger(list);
         }
       });
     },
     _normalizeSinger(list) {
-      let map = {
-        hot: {
-          title: HOT_NAME,
-          items: []
+      let arr = [];
+      let code = [];
+      for (var i = 0; i < 26; i++) {
+        arr[i] = {};
+        if (i == 0) {
+          arr[i].title = "热门";
+          arr[i].items = [];
+        } else {
+          arr[i].title = String.fromCharCode(65 + i - 1);
+          arr[i].items = [];
         }
-      };
-      list.forEach((item, index) => {
-        if (index < HOT_SINGER_LEN) {
-          map.hot.items.push(
-            new Singer({
-              name: item.Fsinger_name,
-              id: item.Fsinger_mid
-            })
-          );
-        }
-
-        const key = item.Findex;
-        if (!map[key]) {
-          map[key] = {
-            title: key,
-            items: []
-          };
-        }
-        map[key].items.push(
-          new Singer({
-            name: item.Fsinger_name,
-            id: item.Fsinger_mid
-          })
-        );
-      });
-      let hot = [];
-      let ret = [];
-      for (let key in map) {
-        if (map[key].title.match(/[a-zA-Z]/)) {
-          ret.push(map[key]);
-        } else if (map[key].title === HOT_NAME) {
-          hot.push(map[key]);
-        }
-        ret.sort((a, b) => {
-          return a.title.charCodeAt(0) - b.title.charCodeAt(0);
-        });
       }
-      return hot.concat(ret);
+      list.forEach((singitem, index) => {
+        if (index < 10) {
+          arr[0].items.push(singitem);
+        }
+        arr.forEach(item => {
+          if (item.title == pinyin.getFullChars(singitem.name).substr(0, 1)) {
+            item.items.push(singitem);
+          }
+        });
+      });
+      return arr;
     },
     selectSinger(item) {
       this.$router.push(`/singer/${item.id}`);
-      this.setSinger(item)
+      this.setSinger(item);
     },
     ...mapMutations({
-      setSinger:'SET_SINGER'
+      setSinger: "SET_SINGER"
     })
   },
   components: {

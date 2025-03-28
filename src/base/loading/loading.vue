@@ -1,40 +1,27 @@
 <template>
-  <div class="loading-content">
-    <img class="loading-img" src="./loading.gif" />
+  <div class="loading">
+    <img width="24" height="24" src="./loading.gif">
     <p class="desc">{{title}}</p>
   </div>
 </template>
-<script>
-export default {
-  name: "Loading",
-  props: {
-    title: {
-      type: String,
-      default: "正在载入..."
+<script type="text/ecmascript-6">
+  export default {
+    props: {
+      title: {
+        type: String,
+        default: '正在载入...'
+      }
     }
   }
-};
 </script>
-<style lang="stylus" scoped>@import '~common/stylus/variable';
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
 
-.loading-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  z-index: 100;
-
-  .loading-img {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  .desc {
-    line-height: 20px;
-    font-size: $font-size-small;
-    color: $color-text-l;
-  }
-}
+  .loading
+    width: 100%
+    text-align: center
+    .desc
+      line-height: 20px
+      font-size: $font-size-small
+      color: $color-text-l
 </style>
